@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>EXPENSE TRACKER</title>
+</head>
+<body>
+    <header>
+        <div id="stick">
+            <center><img src="./media/Untitled design.png" alt="" width="30px">
+            <p>EXPENSE TRACKER</p></center>
+        </div>
+    </header>
+
+
+    <div class="img">
+        <img src="./media/6-Best-Expense-Tracking-Apps-for-Android.avif" alt="" width="100%">
+        <div class="btn">
+            <a href="#tracking"><button>START TRACKING</button></a>
+        </div>
+    </div>
+
+
+    <section class="features">
+        <h2>Features</h2>
+        <p>Organize your finances effortlessly with features that keep your income and expenses under control.</p>
+        <div class="feature-grid">
+            <div class="feature-item">
+                <img src="./media/parallax.png" alt="Intuitive Icon">
+                <p><strong>Intuitive & Clean</strong><br>Simple ways to manage daily expenses and incomes with a clean interface.</p>
+            </div>
+            <div class="feature-item">
+                <img src="./media/1463842331_85.png" alt="Secure Icon">
+                <p><strong>Secure</strong><br>Your data is safely stored no matter where or which device you're using.</p>
+            </div>
+            <div class="feature-item">
+                <img src="./media/1463842469_88.png" alt="Comprehensive Icon">
+                <p><strong>Comprehensive</strong><br>Complete list of expense and income categories, customizable to your needs.</p>
+            </div>
+            <div class="feature-item">
+                <img src="./media/1463842604_hexagon_abstract_creative_center.png" alt="Reliable Icon">
+                <p><strong>Reliable & Useful</strong><br>Set reminders for payments and manage your finances without missing a beat.</p>
+            </div>
+        </div>
+    </section>
+
+
+
+    
+    <center>
+        <div class="add" id="tracking">
+            <form id="expense">
+                <h1>Enter Expense</h1>
+                <input type="text" placeholder="Expensed On" id="expense-name">
+                <input type="number" placeholder="Amount" id="expense-amount">
+                <select id="expenseCategory">
+                    <option id="food" value="food">Food</option>
+                    <option id="transport" value="transport">Transport</option>
+                    <option id="entertainment" value="entertainment">Entertainment</option>
+                    <option id="other" value="other">Other</option>
+                </select>
+                <input type="date" id="expense-date">
+                <button type="submit" onclick="addExpense()">Add Expense</button>
+            </form>
+        </div>
+    </center>
+    <center>
+        <h1>Expenses</h1>
+        <div class="view">
+            <div class="header">Expensed On</div>
+            <div class="header">Amount</div>
+            <div class="header">Category</div>
+            <div class="header">Date</div>
+            <div class="header">Action</div>
+
+            <div id="lists1"></div>
+            <div id="lists2"></div>
+            <div id="lists3"></div>
+            <div id="lists4"></div>
+            <div id="lists5"></div>
+
+        </div>
+    </center>
+    <div class="total">
+        <strong>Total :</strong> Rs <span id="amount">0</span>
+    </div>
+
+
+    <center>
+        <div id="editModel" class="edit">
+            <form action="" id="editExp">
+                <h1>Edit Expense</h1>
+                <input type="text" id="editName" placeholder="Expensed On">
+                <input type="number" id="editAmount" placeholder="Amount">
+                <select id="editCategory">
+                    <option id="food" value="food">Food</option>
+                    <option id="transport" value="transport">Transport</option>
+                    <option id="entertainment" value="entertainment">Entertainment</option>
+                    <option id="other" value="other">Other</option>
+                </select>
+                <input type="date" id="editDate">
+                <button type="submit" onclick="editExpense()">Edit Expense</button>
+            </form>
+        </div>
+    </center>
+
+
+    <div class="about">
+        <center><h2>ABOUT</h2></center>
+        <center><p>This expense tracker application is dedicated to helping you manage your financial life.</p></center>
+        <center><h1>Simple, Intuitive, and Straightforward</h1></center>
+        <center><p>If you are looking for a complicated money management app that promises to do everything, then this app may not be for you. This expense tracker is designed to be simple and straightforward, helping you track expenses, manage budgets, and organize spending to create order in your financial life.</p></center>
+        <div class="stats">
+            <div class="container">
+                <div class="circle" style="border: 5px solid #E96656;">100</div>
+                <div class="text">
+                    <span class="title">EASY-TO-USE</span>
+                    <span>Simple yet efficient</span>
+                </div>
+            </div>
+            <div class="container">
+                <div class="circle" style="border: 5px solid #34D293;">100</div>
+                <div class="text">
+                    <span class="title">COMPREHENSIVE</span>
+                    <span>Covering all your needs</span>
+                </div>
+            </div>
+            <div class="container">
+                <div class="circle" style="border: 5px solid #3AB0E2;">100</div>
+                <div class="text">
+                    <span class="title">SAFE AND SECURE</span>
+                    <span>Your data is protected</span>
+                </div>
+            </div>
+            <div class="container">
+                <div class="circle" style="border: 5px solid #E7AC44;">100</div>
+                <div class="text">
+                    <span class="title">YOUR BEST FRIEND</span>
+                    <span>Never miss a payment</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+
+        async function addExpense() {
+            const expensedOn = document.getElementById('expense-name').value;
+            const amount = parseFloat(document.getElementById('expense-amount').value); // Ensure it's a number
+            const expenseCategory = document.getElementById('expenseCategory').value;
+            const date = document.getElementById('expense-date').value;
+
+            const response = await fetch('http://localhost:3000/api/expense', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ expensedOn, amount, expenseCategory, date }),
+            });
+
+            if (response.ok) {
+                // Clear inputs after successful post
+                document.getElementById('expense-name').value = '';
+                document.getElementById('expense-amount').value = '';
+                document.getElementById('expenseCategory').value = '';
+                document.getElementById('expense-date').value = '';
+
+                // Recalculate total and update the list
+                getExpense();
+            } else {
+                console.error('Cannot add expense:', response.statusText);
+            }
+        }
+
+
+        async function getExpense() {
+            const response = await fetch('http://localhost:3000/api/expense');
+            const expenses = await response.json();
+
+            const list1 = document.getElementById('lists1');
+            const list2 = document.getElementById('lists2');
+            const list3 = document.getElementById('lists3');
+            const list4 = document.getElementById('lists4');
+            const list5 = document.getElementById('lists5');
+            const totalAmountElem = document.getElementById('amount'); // Total amount element
+
+            // Initialize total amount to 0
+            let totalAmount = 0;
+
+            // Clear previous list contents
+            list1.innerHTML = '';
+            list2.innerHTML = '';
+            list3.innerHTML = '';
+            list4.innerHTML = '';
+            list5.innerHTML = '';
+
+            expenses.forEach(expense => {
+                const expenseDiv1 = document.createElement('div');
+                const expenseDiv2 = document.createElement('div');
+                const expenseDiv3 = document.createElement('div');
+                const expenseDiv4 = document.createElement('div');
+                const expenseDiv5 = document.createElement('div');
+
+                expenseDiv1.innerHTML = `${expense.expensedOn}`;
+                expenseDiv2.innerHTML = `${expense.amount}`;
+                totalAmount += expense.amount; // Add amount to total
+
+                // Display category (food, transport, etc.)
+                if (expense.food) {
+                    expenseDiv3.innerHTML = `${expense.food}`;
+                } else if (expense.transport) {
+                    expenseDiv3.innerHTML = `${expense.transport}`;
+                } else if (expense.entertainment) {
+                    expenseDiv3.innerHTML = `${expense.entertainment}`;
+                } else if (expense.other) {
+                    expenseDiv3.innerHTML = `${expense.other}`;
+                } else {
+                    expenseDiv3.innerHTML = 'Unknown';
+                }
+
+                expenseDiv4.innerHTML = new Date(expense.date).toLocaleDateString();
+                expenseDiv5.innerHTML = `<button onclick="openEditModel('${expense._id}','${expense.expensedOn}','${expense.amount}','${expense.food || expense.transport || expense.entertainment || expense.other}','${new Date(expense.date).toISOString().split("T")[0]}')">Edit</button> <button onclick="deleteExpense('${expense._id}')">Delete</button>`;
+
+                // Append the expense to the respective lists
+                list1.appendChild(expenseDiv1);
+                list2.appendChild(expenseDiv2);
+                list3.appendChild(expenseDiv3);
+                list4.appendChild(expenseDiv4);
+                list5.appendChild(expenseDiv5);
+            });
+
+            // Update the total amount
+            totalAmountElem.textContent = totalAmount;
+        }
+
+
+        window.onload = getExpense;
+
+
+        function openEditModel(id, expensedOn, amount, expenseCategory, date){
+            const formattedDate = date ? new Date(date).toLocaleDateString('en-CA') : '';
+            currentEditId = id;
+
+            console.log(expenseCategory);
+
+            document.getElementById('editName').value = expensedOn;
+            document.getElementById('editAmount').value = amount;
+            document.getElementById('editCategory').value = expenseCategory;
+            document.getElementById('editDate').value = formattedDate;
+            document.getElementById('editModel').style.display = 'block';
+        }
+        
+
+
+        async function editExpense() {
+            const expensedOn = document.getElementById('editName').value;
+            const amount = parseFloat(document.getElementById('editAmount').value);
+            const expenseCategory = document.getElementById('editCategory').value;
+            const date = new Date(document.getElementById('editDate').value).toISOString().split("T")[0];
+
+            if (currentEditId) {
+                const response = await fetch(`http://localhost:3000/api/expense/${currentEditId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ expensedOn, amount, expenseCategory, date }),
+                });
+
+                if (response.ok) {
+                    getExpense(); // Recalculate total and update list after editing
+                    document.getElementById('editModel').style.display = 'none';
+                } else {
+                    console.error('Failed to update expense:', response.statusText);
+                }
+            }
+        }
+
+
+        async function deleteExpense(id) {
+            const response = await fetch(`http://localhost:3000/api/expense/${id}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                getExpense(); // Recalculate total and update list after deletion
+            } else {
+                console.error('Failed to remove expense:', response.statusText);
+            }
+        }
+
+    </script>
+    
+</body>
+</html>
